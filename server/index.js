@@ -38,19 +38,20 @@ app.use(cors({
 
 // Configure express-session
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'defaultSecret', // Replace with a secure secret from your .env file
-    resave: false,
-    saveUninitialized: false,
+    secret: process.env.SECRET || 'defaultSecret', // Keep this secure and private
+    resave: false, // Prevents unnecessary session re-saving
+    saveUninitialized: false, // Prevents creating sessions for unauthenticated users
     store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URL, // Store sessions in MongoDB
+        mongoUrl: process.env.MONGO_URL, // Connects sessions to MongoDB
         collectionName: 'sessions'
     }),
     cookie: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Only true in production (HTTPS)
-        sameSite: 'lax' // Adjust based on your CSRF policy
+        httpOnly: true, // Protects against XSS by preventing client-side script access
+        secure: process.env.NODE_ENV === 'production', // True in production for HTTPS
+        sameSite: 'lax' // Adjust based on app's CSRF policy; 'strict' for stricter security
     }
 }));
+
 
 // Routes
 app.use("/api/auth", authRoute);
