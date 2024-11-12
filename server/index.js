@@ -1,7 +1,7 @@
 const express=require('express')
 const app=express()
 const mongoose=require('mongoose')
-const dotenv=require('dotenv')
+const dotenv=require('dotenv').config()
 const cors=require('cors')
 const multer=require('multer')
 const path=require("path")
@@ -11,7 +11,10 @@ const userRoute=require('./routes/users')
 const postRoute=require('./routes/posts')
 const commentRoute=require('./routes/comments')
 
+
+
 //database
+
 const connectDB=async()=>{
     try{
         await mongoose.connect(process.env.MONGO_URL)
