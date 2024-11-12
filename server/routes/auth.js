@@ -38,7 +38,7 @@ router.post("/login",async (req,res)=>{
         }
         const token=jwt.sign({_id:user._id,username:user.username,email:user.email},process.env.SECRET,{expiresIn:"3d"})
         const {password,...info}=user._doc
-        res.cookie("token",token).status(200).json(info)
+        res.session("token",token).status(200).json(info)
 
     }
     catch(err){
@@ -51,7 +51,7 @@ router.post("/login",async (req,res)=>{
 //LOGOUT
 router.get("/logout",async (req,res)=>{
     try{
-        res.clearCookie("token",{sameSite:"none",secure:true}).status(200).send("User logged out successfully!")
+        res.clearsession("token",{sameSite:"none",secure:true}).status(200).send("User logged out successfully!")
 
     }
     catch(err){
@@ -61,7 +61,7 @@ router.get("/logout",async (req,res)=>{
 
 //REFETCH USER
 router.get("/refetch", (req,res)=>{
-    const token=req.cookies.token
+    const token=req.session.token
     jwt.verify(token,process.env.SECRET,{},async (err,data)=>{
         if(err){
             return res.status(404).json(err)
