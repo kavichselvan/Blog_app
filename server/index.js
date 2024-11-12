@@ -1,7 +1,7 @@
 const express=require('express')
 const app=express()
 const mongoose=require('mongoose')
-const dotenv=require('dotenv').config()
+const dotenv=require('dotenv')
 const cors=require('cors')
 const multer=require('multer')
 const path=require("path")
