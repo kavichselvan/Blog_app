@@ -32,7 +32,7 @@ app.use("/images", express.static(path.join(__dirname, "/images")));
 
 // Configure CORS
 app.use(cors({
-    origin: "https://bluetoblog.netlify.app/", // Replace with your frontend URL
+    origin: "https://bluetoblog.netlify.app", // Replace with your frontend URL
     credentials: true
 }));
 
