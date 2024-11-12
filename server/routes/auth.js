@@ -25,7 +25,6 @@ router.post("/register", async (req, res) => {
     }
 });
 
-
 // LOGIN
 router.post("/login", async (req, res) => {
     try {
@@ -41,31 +40,49 @@ router.post("/login", async (req, res) => {
             return res.status(401).json("Wrong credentials!");
         }
 
-        const token = jwt.sign({ _id: user._id, username: user.username, email: user.email }, process.env.SECRET, { expiresIn: "3d" });
+        const token = jwt.sign(
+            { _id: user._id, username: user.username, email: user.email },
+            process.env.SECRET,
+            { expiresIn: "3d" }
+        );
         const { password, ...info } = user._doc;
 
-        res.cookie("token", token).status(200).json(info);
+        res.cookie("token", token, {
+            httpOnly: true, // Ensure token cannot be accessed via JavaScript
+            secure: process.env.NODE_ENV === "production", // Secure in production (HTTPS)
+            sameSite: "none" // Cross-origin cookie sharing
+        }).status(200).json(info);
 
     } catch (err) {
-        res.status(500).json(err);
+        console.error("Error in login:", err);
+        res.status(500).json({ message: "Internal Server Error", error: err.message });
     }
 });
 
 // LOGOUT
-router.get("/logout", async (req, res) => {
+router.get("/logout", (req, res) => {
     try {
-        res.clearCookie("token", { sameSite: "none", secure: true }).status(200).send("User logged out successfully!");
+        res.clearCookie("token", {
+            sameSite: "none",
+            secure: process.env.NODE_ENV === "production"
+        }).status(200).send("User logged out successfully!");
     } catch (err) {
-        res.status(500).json(err);
+        res.status(500).json({ message: "Internal Server Error", error: err.message });
     }
 });
 
 // REFETCH USER
 router.get("/refetch", (req, res) => {
     const token = req.cookies.token;
-    jwt.verify(token, process.env.SECRET, {}, async (err, data) => {
+
+    if (!token) {
+        return res.status(401).json("Unauthorized: No token provided.");
+    }
+
+    jwt.verify(token, process.env.SECRET, {}, (err, data) => {
         if (err) {
-            return res.status(404).json(err);
+            console.error("JWT verification failed:", err); // Log error for debugging
+            return res.status(401).json("Unauthorized: Invalid token.");
         }
         res.status(200).json(data);
     });
