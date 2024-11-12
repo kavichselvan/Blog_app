@@ -34,19 +34,30 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className="px-8 md:px-[200px] min-h-[80vh]">
+      <div className="px-4 md:px-24 min-h-[80vh] py-8 bg-gradient-to-b from-gray-50 to-gray-100">
         {loader ? (
           <div className="h-[40vh] flex justify-center items-center">
             <Loader />
           </div>
         ) : !noResults ? (
-          posts.map((post) => (
-            <Link key={post._id} to={user ? `/posts/post/${post._id}` : "/login"}>
-              <HomePosts post={post} />
-            </Link>
-          ))
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.map((post) => (
+              <Link 
+                key={post._id} 
+                to={user ? `/posts/post/${post._id}` : "/login"} 
+                className="block transform transition duration-300 hover:scale-105"
+              >
+                <HomePosts 
+                  post={post} 
+                  className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg"
+                />
+              </Link>
+            ))}
+          </div>
         ) : (
-          <h3 className="text-center font-bold mt-16">No posts available</h3>
+          <h3 className="text-center font-bold mt-16 text-2xl text-gray-600">
+            No posts available
+          </h3>
         )}
       </div>
       <Footer />
