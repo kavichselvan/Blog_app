@@ -8,7 +8,7 @@ body {
   color: #f0f0f0; /* Light text for contrast */
   background-color: #121212; /* Dark background for modern look */
   line-height: 1.6; /* Improves readability */
-  font-family: 'Inter', sans-serif; /* Clean, modern font */
+  font-family: 'Inter', sans-serif, Arial, Helvetica, sans-serif; /* Clean, modern font */
   overflow-x: hidden; /* Prevents horizontal scrolling */
 }
 
@@ -19,6 +19,14 @@ body {
 }
 ::-webkit-scrollbar-thumb {
   background-color: #444; /* Slightly lighter thumb */
+  border-radius: 4px;
+}
+
+::-moz-scrollbar {
+  width: 8px;
+}
+::-moz-scrollbar-thumb {
+  background-color: #444;
   border-radius: 4px;
 }
 
@@ -52,6 +60,7 @@ img {
   object-fit: cover;
   border-radius: 12px; /* Smoother corner radius */
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+  will-change: transform;
 }
 img:hover {
   transform: scale(1.05); /* Slight zoom on hover */
@@ -82,10 +91,10 @@ div.postpage div.content p {
 /* Custom Tailwind components */
 @layer components {
   .post-card {
-    @apply bg-gray-800 p-5 rounded-lg shadow-lg hover:shadow-xl transition-shadow;
+    @apply bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow;
   }
   .post-title {
-    @apply text-2xl font-extrabold mb-2 text-white;
+    @apply text-2xl font-extrabold mb-2 text-black; /* Updated to text-black */
   }
   .post-meta {
     @apply text-gray-400 text-sm mb-4;
@@ -103,7 +112,7 @@ div.postpage div.content p {
   h1,
   h2,
   h3 {
-    @apply text-center font-bold mt-6 mb-4 text-white;
+    @apply text-center font-bold mt-6 mb-4 text-black; /* Updated to text-black */
   }
 }
 
