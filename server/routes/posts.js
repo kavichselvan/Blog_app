@@ -5,13 +5,21 @@ const Comment = require('../models/Comment');
 const verifyToken = require('../verifyToken');
 
 // CREATE
-router.post("/create", verifyToken, async (req, res) => {
+router.post('/create', verifyToken, async (req, res) => {
+    const { title, desc, photo, categories } = req.body;
     try {
-        const newPost = new Post(req.body);
-        const savedPost = await newPost.save();
-        res.status(200).json(savedPost);
+        const newPost = new Post({
+            title,
+            desc,
+            photo,
+            username: req.user.username, // Accessing the username from the token
+            userId: req.user.id,         // Accessing the userId from the token
+            categories
+        });
+        await newPost.save();
+        res.status(201).json(newPost);
     } catch (err) {
-        res.status(500).json(err);
+        res.status(500).json({ msg: err.message });
     }
 });
 
