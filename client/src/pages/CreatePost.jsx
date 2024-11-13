@@ -52,7 +52,9 @@ const CreatePost = () => {
 
       // Image upload
       try {
-        const imgUpload = await axios.post(`${URL}/api/upload`, data)
+        const imgUpload = await axios.post(`${URL}/api/upload`, data, {
+          withCredentials: true  // Automatically includes session cookie for authentication
+        })
       } catch (err) {
         console.log(err)
       }
@@ -60,7 +62,9 @@ const CreatePost = () => {
 
     // Post upload
     try {
-      const res = await axios.post(`${URL}/api/posts/create`, post, { withCredentials: true })
+      const res = await axios.post(`${URL}/api/posts/create`, post, {
+        withCredentials: true  // Automatically includes session cookie for authentication
+      })
       navigate(`/posts/post/${res.data._id}`)
     } catch (err) {
       console.log(err)
